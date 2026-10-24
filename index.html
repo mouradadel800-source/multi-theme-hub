@@ -1,909 +1,471 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multi-Theme Hub: TF141 Roster + Mini-Game | Fortnite | Roman Atlas</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@600;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  
-  <style>
-    .font-mono-tac { font-family: 'JetBrains Mono', monospace; }
-    .font-gamer { font-family: 'Orbitron', sans-serif; }
-    .font-roman { font-family: 'Cinzel', serif; }
-    .font-sans-clean { font-family: 'Inter', sans-serif; }
-
-    /* CRT Scanline Effect */
-    .scanlines {
-      background: linear-gradient(
-        rgba(18, 16, 16, 0) 50%, 
-        rgba(0, 0, 0, 0.35) 50%
-      ), linear-gradient(
-        90deg,
-        rgba(255, 0, 0, 0.03),
-        rgba(0, 255, 0, 0.01),
-        rgba(0, 0, 255, 0.03)
-      );
-      background-size: 100% 4px, 6px 100%;
-    }
-
-    /* Redacted Text Effect */
-    .redacted {
-      background-color: #10b981;
-      color: transparent;
-      user-select: none;
-      padding: 0 6px;
-      border-radius: 2px;
-      transition: all 0.35s ease;
-      cursor: pointer;
-    }
-    .redacted.decrypted {
-      background-color: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      user-select: auto;
-    }
-
-    /* Tactical Grid Background for Aim Trainer */
-    .tactical-grid {
-      background-size: 28px 28px;
-      background-image: 
-        linear-gradient(to right, rgba(16, 185, 129, 0.08) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(16, 185, 129, 0.08) 1px, transparent 1px);
-    }
-
-    /* Smooth animations */
-    .tab-section {
-      animation: fadeIn 0.3s ease-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
-</head>
-<body class="bg-zinc-950 text-zinc-100 min-h-screen font-sans-clean selection:bg-emerald-500 selection:text-black">
-
-  <!-- TOP THEME SWITCHER & AUDIO CONTROLS BAR -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-zinc-900/90 border-b border-zinc-800 px-4 py-3">
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <span class="h-3 w-3 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span class="text-xs uppercase tracking-widest text-zinc-400 font-mono-tac">Multi-Concept Hub</span>
-        <!-- Sound Effects Mute/Unmute Toggle -->
-        <button onclick="toggleMute()" id="mute-btn" class="ml-2 px-2.5 py-1 rounded bg-zinc-800 border border-zinc-700 text-[11px] font-mono-tac text-emerald-400 hover:bg-zinc-700 transition">
-          🔊 SFX: ON
-        </button>
-      </div>
-      
-      <div class="flex flex-wrap gap-2">
-        <button onclick="switchTheme('tf141')" id="btn-tf141" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-emerald-500 text-black shadow-lg shadow-emerald-500/20">
-          1. Task Force 141 Roster
-        </button>
-        <button onclick="switchTheme('fortnite')" id="btn-fortnite" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-zinc-800 text-zinc-300 hover:bg-zinc-700">
-          2. Fortnite Creative Hub
-        </button>
-        <button onclick="switchTheme('rome')" id="btn-rome" class="px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-zinc-800 text-zinc-300 hover:bg-zinc-700">
-          3. Roman Empire Atlas
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- ==========================================
-       CONCEPT 1: TASK FORCE 141 SQUAD ROSTER
-       ========================================== -->
-  <main id="theme-tf141" class="tab-section scanlines min-h-[calc(100vh-64px)] p-6 md:p-10 font-mono-tac">
-    <div class="max-w-5xl mx-auto space-y-6">
-
-      <!-- OPERATOR SELECTION BAR -->
-      <div class="flex flex-wrap items-center justify-between gap-4 bg-zinc-900/90 border border-emerald-500/30 p-4 rounded-lg">
-        <div class="flex items-center gap-2">
-          <span class="text-xs text-emerald-400 uppercase tracking-widest font-bold">// SELECT OPERATOR FILE:</span>
-        </div>
-        <div class="flex flex-wrap gap-2">
-          <button onclick="selectOperator('ghost')" id="op-btn-ghost" class="px-4 py-2 rounded text-xs font-bold uppercase transition bg-emerald-500 text-black shadow-md shadow-emerald-500/20">
-            💀 Lt. "Ghost" Riley
-          </button>
-          <button onclick="selectOperator('price')" id="op-btn-price" class="px-4 py-2 rounded text-xs font-bold uppercase transition bg-zinc-800 text-zinc-300 hover:bg-zinc-700">
-            🎯 Capt. John Price
-          </button>
-          <button onclick="selectOperator('soap')" id="op-btn-soap" class="px-4 py-2 rounded text-xs font-bold uppercase transition bg-zinc-800 text-zinc-300 hover:bg-zinc-700">
-            💥 Sgt. "Soap" MacTavish
-          </button>
-        </div>
-      </div>
-
-      <!-- OPERATOR DOSSIER CARD -->
-      <div class="border border-emerald-500/40 bg-zinc-900/80 p-6 rounded-lg relative overflow-hidden">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-emerald-500/20 pb-6">
-          
-          <!-- Dynamic SVG Tactical Portrait + Name -->
-          <div class="flex items-center gap-5">
-            <div id="op-avatar" class="w-20 h-20 rounded-lg bg-black border-2 border-emerald-500/60 flex items-center justify-center p-2 shadow-inner">
-              <!-- Populated by JS -->
-            </div>
-            <div>
-              <p class="text-xs text-emerald-400 tracking-widest">CLEARANCE LEVEL: TOP SECRET // TF-141</p>
-              <h1 id="op-name" class="text-2xl md:text-4xl font-bold text-white mt-1">LT. SIMON "GHOST" RILEY</h1>
-              <p id="op-unit" class="text-zinc-400 text-sm mt-1">Special Air Service (22nd SAS) &bull; Task Force 141</p>
-            </div>
-          </div>
-
-          <div class="flex flex-wrap gap-2">
-            <button onclick="playNvgSound()" class="px-3 py-2 border border-emerald-500/50 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-500 hover:text-black transition text-xs font-bold uppercase tracking-wider rounded">
-              🔊 Test NVG Audio
-            </button>
-            <button onclick="decryptAll()" id="decrypt-btn" class="px-4 py-2 border border-emerald-400 text-emerald-400 hover:bg-emerald-400 hover:text-black transition text-xs font-bold uppercase tracking-wider rounded">
-              [ Decrypt Intel ]
-            </button>
-          </div>
-        </div>
-
-        <!-- Bio & Stats Grid -->
-        <div class="grid md:grid-cols-3 gap-6 mt-6">
-          <div class="bg-black/60 border border-emerald-500/20 p-4 rounded">
-            <span class="text-xs text-zinc-500">CALLSIGN / STATUS</span>
-            <p id="op-callsign" class="text-lg font-bold text-emerald-400 mt-1">GHOST // ACTIVE</p>
-            <p id="op-signature" class="text-xs text-zinc-400 mt-2">Signature: Ballistic Skull Mask</p>
-          </div>
-          <div class="bg-black/60 border border-emerald-500/20 p-4 rounded">
-            <span class="text-xs text-zinc-500">PRIMARY WEAPON LOADOUT</span>
-            <p id="op-weapon" class="text-lg font-bold text-white mt-1">M4A1 / Honey Badger</p>
-            <p id="op-role" class="text-xs text-zinc-400 mt-2">Role: Clandestine Infiltration & Recon</p>
-          </div>
-          <div class="bg-black/60 border border-emerald-500/20 p-4 rounded">
-            <span class="text-xs text-zinc-500">CLASSIFIED ORIGIN</span>
-            <p class="text-lg font-bold text-white mt-1">
-              <span id="op-origin" class="redacted" onclick="revealSingle(this)">Manchester, England</span>
-            </p>
-            <p class="text-xs text-zinc-400 mt-2">(Click green bar or button to decrypt)</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Classified Lore & Interactive Terminal -->
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="border border-zinc-800 bg-zinc-900/60 p-6 rounded-lg flex flex-col justify-between">
-          <div>
-            <h2 class="text-emerald-400 font-bold text-lg mb-3">// OPERATOR LORE & SERVICE RECORD</h2>
-            <p id="op-bio-1" class="text-sm text-zinc-300 leading-relaxed">
-              An expert in clandestine trade, sabotage, and infiltration. Following betrayal during an operation in 
-              <span class="redacted" onclick="revealSingle(this)">Mexico against Manuel Roba</span>, 
-              Riley adopted the iconic skull-patterned mask to conceal his identity and strike psychological terror into hostile forces.
-            </p>
-            <p id="op-bio-2" class="text-sm text-zinc-300 leading-relaxed mt-4">
-              Recruited by <span class="redacted" onclick="revealSingle(this)">General Shepherd & Capt. Price</span> 
-              into Task Force 141, serving as second-in-command during high-risk global counter-terror operations.
-            </p>
-          </div>
-          <div class="mt-6 pt-4 border-t border-zinc-800 flex items-center justify-between text-xs text-zinc-400">
-            <span>VOICE COMMS QUOTE:</span>
-            <strong id="op-quote" class="text-emerald-400 italic">"Be careful who you trust, Sergeant."</strong>
-          </div>
-        </div>
-
-        <!-- Interactive Mission Log -->
-        <div class="border border-zinc-800 bg-zinc-900/60 p-6 rounded-lg">
-          <h2 class="text-emerald-400 font-bold text-lg mb-3">// INTERACTIVE COMMS TERMINAL</h2>
-          <div id="terminal-output" class="bg-black p-4 rounded border border-zinc-800 h-40 overflow-y-auto text-xs text-emerald-300 space-y-2">
-            <p>&gt; AUDIO SYNTHESIZER ONLINE...</p>
-            <p>&gt; SELECT AN OPERATOR OR MISSION LOG BELOW.</p>
-          </div>
-          <div class="flex flex-wrap gap-2 mt-4">
-            <button onclick="logMission('Op Kingfish: High-value target extraction in Ukraine.')" class="px-3 py-1.5 bg-zinc-800 hover:bg-emerald-500 hover:text-black text-xs rounded transition">Op: Kingfish</button>
-            <button onclick="logMission('Las Almas Cartel: Joint op with Col. Alejandro Vargas.')" class="px-3 py-1.5 bg-zinc-800 hover:bg-emerald-500 hover:text-black text-xs rounded transition">Las Almas</button>
-            <button onclick="logMission('Operation Guillotine: Sniper overwatch in Urzikstan.')" class="px-3 py-1.5 bg-zinc-800 hover:bg-emerald-500 hover:text-black text-xs rounded transition">Op: Guillotine</button>
-            <button onclick="clearTerminal()" class="px-3 py-1.5 bg-rose-950/60 border border-rose-500/40 text-rose-300 hover:bg-rose-600 hover:text-white text-xs rounded transition ml-auto">Clear Log</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ====================================================
-           NEW SECTION: TACTICAL AIM TRAINER & LORE QUIZ
-           ==================================================== -->
-      <div class="grid md:grid-cols-2 gap-6 pt-2">
-        
-        <!-- 1. TACTICAL AIM TRAINER MINI-GAME -->
-        <div class="border border-emerald-500/40 bg-zinc-900/80 p-6 rounded-lg flex flex-col justify-between">
-          <div>
-            <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
-              <h2 class="text-emerald-400 font-bold text-lg">// KILLHOUSE REFLEX RANGE</h2>
-              <button onclick="startAimGame()" id="aim-start-btn" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs uppercase rounded transition shadow-md shadow-emerald-500/20">
-                ▶ Start 15s Drill
-              </button>
-            </div>
-            
-            <!-- Live HUD Scoreboard -->
-            <div class="grid grid-cols-3 gap-2 mb-4 text-center bg-black/70 p-2.5 rounded border border-zinc-800 text-xs">
-              <div>
-                <span class="text-zinc-500 block text-[10px]">TIME LEFT</span>
-                <strong id="aim-time" class="text-emerald-400 text-base">15s</strong>
-              </div>
-              <div>
-                <span class="text-zinc-500 block text-[10px]">TARGETS HIT</span>
-                <strong id="aim-score" class="text-white text-base">0</strong>
-              </div>
-              <div>
-                <span class="text-zinc-500 block text-[10px]">ACCURACY</span>
-                <strong id="aim-acc" class="text-amber-400 text-base">100%</strong>
-              </div>
-            </div>
-
-            <!-- Interactive Shooting Canvas Arena -->
-            <div id="aim-arena" onclick="recordArenaMiss(event)" class="relative w-full h-56 bg-black tactical-grid border border-emerald-500/30 rounded-lg overflow-hidden cursor-crosshair select-none flex items-center justify-center">
-              <p id="aim-overlay-msg" class="text-xs text-zinc-400 text-center px-4 pointer-events-none">
-                Click <strong class="text-emerald-400">"Start 15s Drill"</strong> to deploy tactical targets.<br>Test your reaction speed and accuracy!
-              </p>
-              
-              <!-- Moving Target Element -->
-              <div id="aim-target" onclick="hitTarget(event)" class="hidden absolute w-11 h-11 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center shadow-lg shadow-emerald-500/40 transition-transform duration-75 active:scale-75">
-                <div class="w-5 h-5 rounded-full border border-emerald-300 flex items-center justify-center">
-                  <div class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p class="text-[11px] text-zinc-400 mt-3 flex justify-between">
-            <span>Status: Suppressed weapon audio enabled</span>
-            <span id="aim-rank" class="text-emerald-400 font-bold">Rank: Unranked</span>
-          </p>
-        </div>
-
-        <!-- 2. INTERACTIVE LORE & TACTICAL QUIZ -->
-        <div class="border border-emerald-500/40 bg-zinc-900/80 p-6 rounded-lg flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <h2 class="text-emerald-400 font-bold text-lg">// TF-141 INTEL QUIZ</h2>
-              <span id="quiz-progress" class="text-xs px-2.5 py-1 bg-black border border-emerald-500/30 text-emerald-300 rounded">
-                Question 1 / 5
-              </span>
-            </div>
-
-            <!-- Quiz Question Container -->
-            <div id="quiz-box" class="bg-black/60 border border-zinc-800 p-4 rounded-lg min-h-[220px] flex flex-col justify-between">
-              <div>
-                <p id="quiz-question" class="text-sm font-bold text-white leading-relaxed">
-                  Loading classified intelligence question...
-                </p>
-                <div id="quiz-options" class="space-y-2 mt-4">
-                  <!-- Populated dynamically via JS -->
-                </div>
-              </div>
-
-              <div id="quiz-feedback" class="hidden mt-4 pt-3 border-t border-zinc-800 flex items-center justify-between">
-                <span id="quiz-feedback-text" class="text-xs font-bold"></span>
-                <button onclick="nextQuizQuestion()" class="px-3 py-1 bg-emerald-500 text-black font-bold text-xs uppercase rounded hover:bg-emerald-400 transition">
-                  Next &rarr;
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-3 flex justify-between items-center text-xs text-zinc-400">
-            <span>Verified Score: <strong id="quiz-score" class="text-emerald-400">0 / 5</strong></span>
-            <button onclick="resetQuiz()" class="text-zinc-400 hover:text-white underline text-[11px]">Restart Quiz</button>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </main>
-
-  <!-- ==========================================
-       CONCEPT 2: FORTNITE CREATIVE & VAULT HUB
-       ========================================== -->
-  <main id="theme-fortnite" class="tab-section hidden min-h-[calc(100vh-64px)] p-6 md:p-12 bg-gradient-to-br from-indigo-950 via-purple-950 to-zinc-950">
-    <div class="max-w-5xl mx-auto space-y-8">
-      
-      <div class="bg-gradient-to-r from-fuchsia-600 to-cyan-500 p-1 rounded-2xl shadow-2xl shadow-fuchsia-500/20">
-        <div class="bg-zinc-950/90 rounded-xl p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <span class="px-3 py-1 bg-fuchsia-500/20 text-fuchsia-300 text-xs font-bold uppercase rounded-full border border-fuchsia-500/40">Featured Creative Island</span>
-            <h1 class="text-3xl md:text-5xl font-black font-gamer text-white mt-3 tracking-wide">FORTM ARENA HUB</h1>
-            <p class="text-zinc-300 mt-2 max-w-xl text-sm">Drop right into the action. Copy the verified island code below (now with a synthesized chest-unlock chime!).</p>
-          </div>
-
-          <div class="bg-zinc-900 border-2 border-cyan-400 p-5 rounded-xl text-center min-w-[260px]">
-            <p class="text-xs text-cyan-300 uppercase tracking-widest font-bold">ISLAND CODE</p>
-            <p id="island-code" class="text-2xl font-black font-gamer text-white my-2 tracking-wider">6163-6465-2983</p>
-            <button onclick="copyIslandCode()" id="copy-btn" class="w-full py-2.5 bg-cyan-400 hover:bg-cyan-300 text-black font-bold text-xs uppercase rounded-lg transition shadow-lg shadow-cyan-400/30">
-              Copy Map Code
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-zinc-900/80 border border-purple-500/30 p-6 rounded-2xl">
-          <div class="flex justify-between items-center">
-            <span class="text-xs font-bold uppercase px-2.5 py-1 bg-amber-500/20 text-amber-300 rounded border border-amber-500/40">Icon Series Vault</span>
-            <span class="text-xs text-zinc-400">Rarity: Icon Series</span>
-          </div>
-          <h2 class="text-2xl font-black font-gamer text-white mt-4">TRAVIS SCOTT (CACTUS JACK)</h2>
-          <p class="text-sm text-zinc-400 mt-2">
-            First released during the Astronomical live event. Includes Astro Jack and Cactus Jack back bling tracker.
-          </p>
-          <div class="mt-5 p-4 bg-black/50 rounded-xl border border-zinc-800 flex justify-between items-center">
-            <div>
-              <p class="text-xs text-zinc-500">CURRENT SHOP STATUS</p>
-              <p id="shop-alert-status" class="text-sm font-bold text-rose-400 mt-0.5">VAULTED (Awaiting Return)</p>
-            </div>
-            <button onclick="activateShopAlert()" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-lg transition">
-              Set Shop Alert
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-zinc-900/80 border border-cyan-500/30 p-6 rounded-2xl flex flex-col justify-between">
-          <div>
-            <span class="text-xs font-bold uppercase px-2.5 py-1 bg-cyan-500/20 text-cyan-300 rounded border border-cyan-500/40">Cross-Platform Guide</span>
-            <h2 class="text-2xl font-black font-gamer text-white mt-4">EPIC ACCOUNT LINKING</h2>
-            <p class="text-sm text-zinc-400 mt-2">
-              Keep your locker, V-Bucks, and creative progress synced across PC, PlayStation, Xbox, and Android mobile devices.
-            </p>
-          </div>
-          <div class="mt-4 pt-4 border-t border-zinc-800 flex items-center justify-between text-xs text-zinc-300">
-            <span>2FA Security Status: <strong class="text-emerald-400">Protected</strong></span>
-            <span class="text-cyan-400 font-bold">Sync Ready &rarr;</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </main>
-
-  <!-- ==========================================
-       CONCEPT 3: INTERACTIVE ROMAN EMPIRE ATLAS
-       ========================================== -->
-  <main id="theme-rome" class="tab-section hidden min-h-[calc(100vh-64px)] p-6 md:p-12 bg-stone-950 text-stone-100">
-    <div class="max-w-5xl mx-auto space-y-8">
-      
-      <div class="border-2 border-amber-600/50 bg-gradient-to-b from-red-950/60 to-stone-900 p-8 rounded-xl text-center">
-        <p class="text-xs tracking-[0.3em] text-amber-400 uppercase font-bold">SPQR &bull; Senatus Populusque Romanus</p>
-        <h1 class="text-3xl md:text-5xl font-roman font-extrabold text-amber-100 mt-2">THE RISE OF THE ROMAN EMPIRE</h1>
-        <p class="text-stone-300 text-sm mt-3 max-w-2xl mx-auto">
-          Drag the historical timeline slider below to explore how Rome evolved from a republic on the Tiber River into the dominant superpower of the Mediterranean world.
-        </p>
-      </div>
-
-      <div class="bg-stone-900 border border-amber-500/30 p-6 md:p-8 rounded-xl space-y-6">
-        <div class="flex justify-between items-center">
-          <span class="text-xs uppercase tracking-widest text-amber-400 font-bold">Interactive Chronology</span>
-          <span id="rome-year-badge" class="px-3 py-1 bg-red-900/60 border border-amber-500/40 text-amber-200 font-roman font-bold rounded">27 BCE – 14 CE</span>
-        </div>
-
-        <input type="range" id="rome-slider" min="0" max="3" value="1" oninput="updateRomeEra(this.value)" class="w-full accent-amber-500 cursor-pointer h-2 bg-stone-800 rounded-lg">
-
-        <div class="grid grid-cols-4 text-center text-xs text-stone-400 font-roman">
-          <span>509 BCE (Republic)</span>
-          <span>27 BCE (Augustus)</span>
-          <span>117 CE (Apex)</span>
-          <span>330 CE (Late Empire)</span>
-        </div>
-
-        <div class="bg-stone-950/80 border border-stone-800 p-6 rounded-lg mt-4">
-          <h2 id="rome-title" class="text-2xl font-roman font-bold text-amber-400">The Pax Romana & Augustus Caesar</h2>
-          <p id="rome-desc" class="text-stone-300 text-sm leading-relaxed mt-2">
-            Following the fall of the Republic, Augustus becomes the first Roman Emperor. He initiates the Pax Romana—two centuries of monumental architecture, road networks, and Mediterranean stability.
-          </p>
-          <div class="mt-4 pt-4 border-t border-stone-800 flex flex-wrap gap-6 text-xs">
-            <div><span class="text-stone-500">TERRITORY:</span> <strong id="rome-territory" class="text-amber-200">Italy, Gaul, Hispania, Egypt, Asia Minor</strong></div>
-            <div><span class="text-stone-500">HISTORICAL SIGNIFICANCE:</span> <strong id="rome-legacy" class="text-amber-200">Foundation of Imperial Law & Engineering</strong></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </main>
-
-  <!-- ==========================================
-       JAVASCRIPT: WEB AUDIO SYNTH & APP LOGIC
-       ========================================== -->
-  <script>
-    // --- 1. BUILT-IN WEB AUDIO API SYNTHESIZER ---
-    let audioCtx = null;
-    let isMuted = false;
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-    }
-
-    function toggleMute() {
-      isMuted = !isMuted;
-      const btn = document.getElementById('mute-btn');
-      if (isMuted) {
-        btn.textContent = "🔇 SFX: OFF";
-        btn.classList.replace('text-emerald-400', 'text-zinc-500');
-      } else {
-        btn.textContent = "🔊 SFX: ON";
-        btn.classList.replace('text-zinc-500', 'text-emerald-400');
-        playTacticalClick();
-      }
-    }
-
-    function playTacticalClick() {
-      if (isMuted) return;
-      initAudio();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(950, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(420, audioCtx.currentTime + 0.045);
-      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.045);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.05);
-    }
-
-    // Suppressed Gunshot Hit Effect for Aim Trainer
-    function playSuppressedShot() {
-      if (isMuted) return;
-      initAudio();
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(260, now);
-      osc.frequency.exponentialRampToValueAtTime(45, now + 0.075);
-      gain.gain.setValueAtTime(0.28, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(now);
-      osc.stop(now + 0.08);
-    }
-
-    // Error / Miss Buzz Sound
-    function playErrorBuzz() {
-      if (isMuted) return;
-      initAudio();
-      const now = audioCtx.currentTime;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(140, now);
-      osc.frequency.setValueAtTime(110, now + 0.08);
-      gain.gain.setValueAtTime(0.12, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(now);
-      osc.stop(now + 0.18);
-    }
-
-    function playNvgSound() {
-      if (isMuted) return;
-      initAudio();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(380, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(3400, audioCtx.currentTime + 0.45);
-      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.55);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.55);
-      logMission("Bravo Six: NVG Optics calibrated and online.");
-    }
-
-    function playSuccessChime() {
-      if (isMuted) return;
-      initAudio();
-      const now = audioCtx.currentTime;
-      [523.25, 659.25, 783.99].forEach((freq, i) => {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, now + i * 0.06);
-        gain.gain.setValueAtTime(0.12, now + i * 0.06);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.18);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(now + i * 0.06);
-        osc.stop(now + i * 0.06 + 0.18);
-      });
-    }
-
-    // --- 2. TACTICAL AIM TRAINER MINI-GAME LOGIC ---
-    let aimActive = false;
-    let aimTimeLeft = 15;
-    let aimHits = 0;
-    let aimTotalClicks = 0;
-    let aimTimerInterval = null;
-
-    function startAimGame() {
-      playSuccessChime();
-      aimActive = true;
-      aimTimeLeft = 15;
-      aimHits = 0;
-      aimTotalClicks = 0;
-
-      document.getElementById('aim-time').textContent = '15s';
-      document.getElementById('aim-score').textContent = '0';
-      document.getElementById('aim-acc').textContent = '100%';
-      document.getElementById('aim-rank').textContent = 'Drill in Progress...';
-      document.getElementById('aim-overlay-msg').classList.add('hidden');
-      
-      const startBtn = document.getElementById('aim-start-btn');
-      startBtn.textContent = 'Restart Drill';
-
-      const target = document.getElementById('aim-target');
-      target.classList.remove('hidden');
-      moveTargetRandomly();
-
-      if (aimTimerInterval) clearInterval(aimTimerInterval);
-      aimTimerInterval = setInterval(() => {
-        aimTimeLeft--;
-        document.getElementById('aim-time').textContent = aimTimeLeft + 's';
-        if (aimTimeLeft <= 0) {
-          endAimGame();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mourad | Official Personal Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0f1d;
+            --bg-card: #131c31;
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.25);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
         }
-      }, 1000);
-    }
 
-    function moveTargetRandomly() {
-      const arena = document.getElementById('aim-arena');
-      const target = document.getElementById('aim-target');
-      const maxX = Math.max(20, arena.clientWidth - 52);
-      const maxY = Math.max(20, arena.clientHeight - 52);
-      const randomX = Math.floor(Math.random() * maxX);
-      const randomY = Math.floor(Math.random() * maxY);
-      target.style.left = randomX + 'px';
-      target.style.top = randomY + 'px';
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
 
-    function hitTarget(e) {
-      e.stopPropagation(); // Prevent triggering arena miss
-      if (!aimActive) return;
-      playSuppressedShot();
-      aimHits++;
-      aimTotalClicks++;
-      updateAimStats();
-      moveTargetRandomly();
-    }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-    function recordArenaMiss(e) {
-      if (!aimActive) return;
-      playErrorBuzz();
-      aimTotalClicks++;
-      updateAimStats();
-    }
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 8%;
+            background: rgba(10, 15, 29, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
 
-    function updateAimStats() {
-      document.getElementById('aim-score').textContent = aimHits;
-      const acc = aimTotalClicks > 0 ? Math.round((aimHits / aimTotalClicks) * 100) : 100;
-      document.getElementById('aim-acc').textContent = acc + '%';
-    }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            text-decoration: none;
+        }
 
-    function endAimGame() {
-      clearInterval(aimTimerInterval);
-      aimActive = false;
-      document.getElementById('aim-target').classList.add('hidden');
-      
-      const msg = document.getElementById('aim-overlay-msg');
-      msg.classList.remove('hidden');
-      
-      let rank = 'Recruit';
-      if (aimHits >= 22) rank = 'Tier-1 Operator (SAS Elite)';
-      else if (aimHits >= 15) rank = 'Veteran Marksman';
-      else if (aimHits >= 9) rank = 'Field Operative';
+        .logo span {
+            color: var(--accent);
+        }
 
-      document.getElementById('aim-rank').textContent = 'Rank: ' + rank;
-      msg.innerHTML = `<span class="text-emerald-400 font-bold text-sm">DRILL COMPLETE!</span><br>Hits: <strong>${aimHits}</strong> | Rating: <strong class="text-amber-300">${rank}</strong><br><span class="text-[11px] text-zinc-400">Click "Restart Drill" to play again.</span>`;
-      playSuccessChime();
-      logMission(`Killhouse Drill Complete: ${aimHits} hits (${rank}).`);
-    }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
 
-    // --- 3. INTERACTIVE LORE QUIZ LOGIC ---
-    const quizQuestions = [
-      {
-        q: "1. What is Lieutenant Simon 'Ghost' Riley's canonical hometown in England?",
-        options: ["London", "Manchester", "Birmingham", "Liverpool"],
-        answer: 1
-      },
-      {
-        q: "2. Which British Special Forces regiment do Captain Price, Ghost, and Soap belong to before Task Force 141?",
-        options: ["22nd SAS (Special Air Service)", "Royal Marines Commandos", "MI6 Field Branch", "Delta Force"],
-        answer: 0
-      },
-      {
-        q: "3. What is Captain John Price's iconic radio callsign when going dark?",
-        options: ["Alpha One", "Ghost Leader", "Bravo Six", "Echo Four"],
-        answer: 2
-      },
-      {
-        q: "4. In theFortnite Creative Hub, what is the verified map code for the FortM Arena?",
-        options: ["1141-0000-9999", "6163-6465-2983", "8888-2222-4444", "5090-2700-1170"],
-        answer: 1
-      },
-      {
-        q: "5. Under which Emperor did the Roman Empire reach its greatest territorial extent in 117 CE?",
-        options: ["Julius Caesar", "Augustus Caesar", "Emperor Trajan", "Constantine the Great"],
-        answer: 2
-      }
-    ];
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
 
-    let currentQuizIndex = 0;
-    let quizScore = 0;
-    let quizAnswered = false;
+        .nav-links a:hover {
+            color: var(--accent);
+        }
 
-    function renderQuizQuestion() {
-      quizAnswered = false;
-      const item = quizQuestions[currentQuizIndex];
-      document.getElementById('quiz-progress').textContent = `Question ${currentQuizIndex + 1} / ${quizQuestions.length}`;
-      document.getElementById('quiz-question').textContent = item.q;
-      document.getElementById('quiz-feedback').classList.add('hidden');
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8rem 8% 4rem;
+            background: radial-gradient(circle at 80% 20%, var(--accent-glow), transparent 40%);
+        }
 
-      const optionsBox = document.getElementById('quiz-options');
-      optionsBox.innerHTML = '';
+        .hero-content {
+            max-width: 650px;
+        }
 
-      item.options.forEach((optText, idx) => {
-        const btn = document.createElement('button');
-        btn.className = "w-full text-left px-3 py-2 rounded border border-zinc-700 bg-zinc-900/90 hover:border-emerald-400 text-xs text-zinc-200 transition flex justify-between items-center";
-        btn.innerHTML = `<span>${optText}</span>`;
-        btn.onclick = () => checkQuizAnswer(idx, btn);
-        optionsBox.appendChild(btn);
-      });
-    }
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--accent);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
 
-    function checkQuizAnswer(selectedIdx, btnElement) {
-      if (quizAnswered) return;
-      quizAnswered = true;
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
 
-      const item = quizQuestions[currentQuizIndex];
-      const allBtns = document.getElementById('quiz-options').children;
-      const feedbackBox = document.getElementById('quiz-feedback');
-      const feedbackText = document.getElementById('quiz-feedback-text');
+        .hero h1 span {
+            color: var(--accent);
+        }
 
-      if (selectedIdx === item.answer) {
-        playSuccessChime();
-        quizScore++;
-        btnElement.className = "w-full text-left px-3 py-2 rounded border border-emerald-400 bg-emerald-950/70 text-xs text-emerald-300 font-bold flex justify-between items-center";
-        btnElement.innerHTML += `<span>✓ CORRECT</span>`;
-        feedbackText.textContent = "INTEL VERIFIED: Correct Answer!";
-        feedbackText.className = "text-xs font-bold text-emerald-400";
-      } else {
-        playErrorBuzz();
-        btnElement.className = "w-full text-left px-3 py-2 rounded border border-rose-500 bg-rose-950/70 text-xs text-rose-300 font-bold flex justify-between items-center";
-        btnElement.innerHTML += `<span>✗ INCORRECT</span>`;
-        allBtns[item.answer].className = "w-full text-left px-3 py-2 rounded border border-emerald-400 bg-emerald-950/40 text-xs text-emerald-300 font-bold flex justify-between items-center";
-        feedbackText.textContent = "BREACH DETECTED: Check highlighted answer.";
-        feedbackText.className = "text-xs font-bold text-rose-400";
-      }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
 
-      document.getElementById('quiz-score').textContent = `${quizScore} / ${quizQuestions.length}`;
-      feedbackBox.classList.remove('hidden');
-    }
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
 
-    function nextQuizQuestion() {
-      playTacticalClick();
-      currentQuizIndex++;
-      if (currentQuizIndex < quizQuestions.length) {
-        renderQuizQuestion();
-      } else {
-        // Show final quiz summary
-        const optionsBox = document.getElementById('quiz-options');
-        document.getElementById('quiz-question').textContent = `MISSION DEBRIEF: You scored ${quizScore} out of ${quizQuestions.length}!`;
-        optionsBox.innerHTML = `<p class="text-xs text-zinc-400 py-2">${quizScore === 5 ? 'Flawless clearance! Captain Price approves.' : 'Solid effort, operative. Hit Restart Quiz below to try for a 5/5.'}</p>`;
-        document.getElementById('quiz-feedback').classList.add('hidden');
-        logMission(`TF-141 Intel Quiz completed with score: ${quizScore}/${quizQuestions.length}`);
-      }
-    }
+        .btn {
+            padding: 0.9rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
 
-    function resetQuiz() {
-      playTacticalClick();
-      currentQuizIndex = 0;
-      quizScore = 0;
-      document.getElementById('quiz-score').textContent = `0 / ${quizQuestions.length}`;
-      renderQuizQuestion();
-    }
+        .btn-primary {
+            background: var(--accent);
+            color: #052e16;
+            box-shadow: 0 8px 20px var(--accent-glow);
+        }
 
-    // --- 4. TASK FORCE 141 OPERATOR ROSTER DATA ---
-    const operators = {
-      ghost: {
-        name: 'LT. SIMON "GHOST" RILEY',
-        unit: 'Special Air Service (22nd SAS) • Task Force 141',
-        callsign: 'GHOST // ACTIVE',
-        signature: 'Signature: Ballistic Skull Mask',
-        weapon: 'M4A1 / Honey Badger (Suppressed)',
-        role: 'Role: Clandestine Infiltration & Recon',
-        origin: 'Manchester, England',
-        bio1: 'An expert in clandestine trade, sabotage, and infiltration. Following betrayal during an operation in <span class="redacted" onclick="revealSingle(this)">Mexico against Manuel Roba</span>, Riley adopted the iconic skull-patterned mask to conceal his identity.',
-        bio2: 'Recruited by <span class="redacted" onclick="revealSingle(this)">General Shepherd & Capt. Price</span> into Task Force 141, serving as field lieutenant during high-risk global counter-terror operations.',
-        quote: '"Be careful who you trust, Sergeant."',
-        svg: `<svg viewBox="0 0 64 64" class="w-14 h-14 text-emerald-400 fill-current"><path d="M32 6C19.85 6 10 15.85 10 28c0 7.6 3.85 14.3 9.7 18.25L22 56h20l2.3-9.75C50.15 42.3 54 35.6 54 28 54 15.85 44.15 6 32 6zm-8 20a5 5 0 110 10 5 5 0 010-10zm16 0a5 5 0 110 10 5 5 0 010-10zm-8 10l4 7h-8l4-7z"/></svg>`
-      },
-      price: {
-        name: 'CAPT. JOHN PRICE',
-        unit: '22nd SAS Regiment • Commander of Task Force 141',
-        callsign: 'BRAVO SIX // ACTIVE',
-        signature: 'Signature: Tactical Boonie Hat & Cigar',
-        weapon: 'Kilo 141 / Suppressed M1911',
-        role: 'Role: Squad Commander & Tactical Mastermind',
-        origin: 'United Kingdom (SAS Selection)',
-        bio1: 'A legendary British Special Forces officer who was mentored by <span class="redacted" onclick="revealSingle(this)">Captain MacMillan in Pripyat (1996)</span> during a classified assassination mission against Imran Zakhaev.',
-        bio2: 'After spearheading <span class="redacted" onclick="revealSingle(this)">Operation Kingfish</span> and enduring imprisonment in a Russian gulag, Price founded Task Force 141 from a hand-picked roster of allied tier-one operators.',
-        quote: '"Bravo Six, going dark."',
-        svg: `<svg viewBox="0 0 64 64" class="w-14 h-14 text-emerald-400 fill-none stroke-current" stroke-width="4"><circle cx="32" cy="32" r="22"/><line x1="32" y1="4" x2="32" y2="60"/><line x1="4" y1="32" x2="60" y2="32"/><circle cx="32" cy="32" r="6"/></svg>`
-      },
-      soap: {
-        name: 'SGT. JOHN "SOAP" MACTAVISH',
-        unit: '22nd SAS Regiment • Task Force 141 Demolitions & Sniper',
-        callsign: 'SOAP // ACTIVE',
-        signature: 'Signature: Tactical Mohawk & C4 Charges',
-        weapon: 'MCPR-300 Sniper / M4 Carbine',
-        role: 'Role: Demolitions Expert & Marksman',
-        origin: 'Scotland, United Kingdom',
-        bio1: 'The youngest candidate to pass SAS selection in regiment history. Introduced to Bravo Team aboard the <span class="redacted" onclick="revealSingle(this)">Bering Strait Cargo Ship raid</span> under Captain Price.',
-        bio2: 'Formed an unbreakable tactical partnership with <span class="redacted" onclick="revealSingle(this)">Lt. Simon "Ghost" Riley</span> in Las Almas, surviving behind enemy lines while hunting Hassan Zyani and Shadow Company.',
-        quote: '"Stay frosty, lads."',
-        svg: `<svg viewBox="0 0 64 64" class="w-14 h-14 text-emerald-400 fill-current"><path d="M36 6L14 36h16l-4 22 24-30H34l2-22z"/></svg>`
-      }
-    };
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
 
-    function selectOperator(opKey) {
-      playTacticalClick();
-      const op = operators[opKey];
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
 
-      ['ghost', 'price', 'soap'].forEach(k => {
-        const btn = document.getElementById('op-btn-' + k);
-        btn.className = "px-4 py-2 rounded text-xs font-bold uppercase transition bg-zinc-800 text-zinc-300 hover:bg-zinc-700";
-      });
-      document.getElementById('op-btn-' + opKey).className = "px-4 py-2 rounded text-xs font-bold uppercase transition bg-emerald-500 text-black shadow-md shadow-emerald-500/20";
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
 
-      document.getElementById('op-avatar').innerHTML = op.svg;
-      document.getElementById('op-name').textContent = op.name;
-      document.getElementById('op-unit').textContent = op.unit;
-      document.getElementById('op-callsign').textContent = op.callsign;
-      document.getElementById('op-signature').textContent = op.signature;
-      document.getElementById('op-weapon').textContent = op.weapon;
-      document.getElementById('op-role').textContent = op.role;
+        /* Quick Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem 8%;
+        }
 
-      const originEl = document.getElementById('op-origin');
-      originEl.textContent = op.origin;
-      originEl.classList.remove('decrypted');
+        .stat-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: transform 0.3s;
+        }
 
-      document.getElementById('op-bio-1').innerHTML = op.bio1;
-      document.getElementById('op-bio-2').innerHTML = op.bio2;
-      document.getElementById('op-quote').textContent = op.quote;
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
 
-      const decBtn = document.getElementById('decrypt-btn');
-      decBtn.textContent = "[ Decrypt Intel ]";
-      decBtn.classList.remove('bg-emerald-400', 'text-black');
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 0.3rem;
+        }
 
-      logMission("Loaded Operator File: " + op.name);
-    }
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-    function revealSingle(el) {
-      el.classList.add('decrypted');
-      playTacticalClick();
-    }
+        /* Section Styling */
+        section {
+            padding: 5rem 8%;
+        }
 
-    function decryptAll() {
-      playSuccessChime();
-      document.querySelectorAll('.redacted').forEach(el => el.classList.add('decrypted'));
-      const btn = document.getElementById('decrypt-btn');
-      btn.textContent = "[ INTEL DECRYPTED ]";
-      btn.classList.add('bg-emerald-400', 'text-black');
-      logMission("SECURITY OVERRIDE: All operator redactions unlocked.");
-    }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
 
-    function logMission(text) {
-      playTacticalClick();
-      const term = document.getElementById('terminal-output');
-      const entry = document.createElement('p');
-      entry.textContent = "> " + text;
-      term.appendChild(entry);
-      term.scrollTop = term.scrollHeight;
-    }
+        .section-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
 
-    function clearTerminal() {
-      playTacticalClick();
-      document.getElementById('terminal-output').innerHTML = '<p>&gt; TERMINAL CLEARED. AWAITING INPUT...</p>';
-    }
+        /* Professional Speech Box */
+        .speech-box {
+            background: linear-gradient(145deg, #131c31, #0f172a);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 3rem;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
 
-    // --- 5. THEME SWITCHER LOGIC ---
-    function switchTheme(theme) {
-      playTacticalClick();
-      const themes = ['tf141', 'fortnite', 'rome'];
-      themes.forEach(t => {
-        document.getElementById('theme-' + t).classList.add('hidden');
-        const btn = document.getElementById('btn-' + t);
-        btn.className = "px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-zinc-800 text-zinc-300 hover:bg-zinc-700";
-      });
+        .speech-text {
+            font-size: 1.2rem;
+            color: #e2e8f0;
+            line-height: 1.9;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
 
-      document.getElementById('theme-' + theme).classList.remove('hidden');
-      const activeBtn = document.getElementById('btn-' + theme);
+        .speech-text p {
+            margin-bottom: 1.2rem;
+        }
 
-      if (theme === 'tf141') {
-        activeBtn.className = "px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-emerald-500 text-black shadow-lg shadow-emerald-500/20";
-      } else if (theme === 'fortnite') {
-        activeBtn.className = "px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-fuchsia-500 text-white shadow-lg shadow-fuchsia-500/30";
-      } else if (theme === 'rome') {
-        activeBtn.className = "px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all bg-amber-500 text-black shadow-lg shadow-amber-500/20";
-      }
-    }
+        .speech-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
 
-    // --- 6. FORTNITE HUB LOGIC ---
-    function copyIslandCode() {
-      playSuccessChime();
-      const code = document.getElementById('island-code').innerText;
-      navigator.clipboard.writeText(code);
-      const btn = document.getElementById('copy-btn');
-      btn.innerText = "COPIED: " + code + " ✓";
-      btn.classList.replace('bg-cyan-400', 'bg-emerald-400');
-      setTimeout(() => {
-        btn.innerText = "Copy Map Code";
-        btn.classList.replace('bg-emerald-400', 'bg-cyan-400');
-      }, 2500);
-    }
+        /* Pillars / Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
 
-    function activateShopAlert() {
-      playSuccessChime();
-      const statusEl = document.getElementById('shop-alert-status');
-      statusEl.textContent = "ALERT ACTIVE ✓ (Tracking Daily Rotation)";
-      statusEl.classList.replace('text-rose-400', 'text-emerald-400');
-    }
+        .info-card {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
 
-    // --- 7. ROMAN EMPIRE TIMELINE LOGIC ---
-    const romeEras = [
-      {
-        year: "509 BCE – 27 BCE",
-        title: "Rise of the Roman Republic",
-        desc: "Rome overthrows its monarchy and establishes a Republic governed by the Senate and Consuls. Through the Punic Wars against Carthage, Rome secures dominance over the western Mediterranean.",
-        territory: "Italian Peninsula, Carthage, Greece, Hispania",
-        legacy: "Checks & balances, Roman Republic constitution, and military legions"
-      },
-      {
-        year: "27 BCE – 14 CE",
-        title: "The Pax Romana & Augustus Caesar",
-        desc: "Following the fall of the Republic, Augustus becomes the first Roman Emperor. He initiates the Pax Romana—two centuries of monumental architecture, road networks, and Mediterranean stability.",
-        territory: "Italy, Gaul, Hispania, Egypt, Asia Minor",
-        legacy: "Foundation of Imperial Law, Aqueducts & Standing Professional Army"
-      },
-      {
-        year: "117 CE",
-        title: "Height of the Empire under Emperor Trajan",
-        desc: "The Roman Empire reaches its greatest territorial extent under Emperor Trajan, spanning over 5 million square kilometers and governing an estimated 50–70 million people.",
-        territory: "Britain to Mesopotamia, Danube to North Africa",
-        legacy: "Trajan's Forum, universal currency, and cultural integration"
-      },
-      {
-        year: "285 CE – 330 CE",
-        title: "Administrative Division & Constantinople",
-        desc: "To manage its vast borders, the Empire is split into Western and Eastern halves. Constantine the Great establishes Nova Roma (Constantinople), setting the stage for the Byzantine preservation of Roman law.",
-        territory: "Divided Western & Eastern Roman Provinces",
-        legacy: "Codification of Roman Law (Corpus Juris Civilis) & architectural domes"
-      }
-    ];
+        .info-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
 
-    function updateRomeEra(index) {
-      playTacticalClick();
-      const data = romeEras[index];
-      document.getElementById('rome-year-badge').innerText = data.year;
-      document.getElementById('rome-title').innerText = data.title;
-      document.getElementById('rome-desc').innerText = data.desc;
-      document.getElementById('rome-territory').innerText = data.territory;
-      document.getElementById('rome-legacy').innerText = data.legacy;
-    }
+        .info-card p {
+            color: var(--text-muted);
+        }
 
-    // Initialize Avatar & Quiz on Page Load
-    window.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('op-avatar').innerHTML = operators.ghost.svg;
-      renderQuizQuestion();
-    });
-  </script>
+        /* Skill Bars */
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .skill-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 50px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 8%;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            .nav-links {
+                display: none;
+            }
+            .speech-box {
+                padding: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">MOURAD<span>.</span></a>
+        <ul class="nav-links">
+            <li><a href="#speech">Executive Speech</a></li>
+            <li><a href="#football">Football</a></li>
+            <li><a href="#brotherhood">Brotherhood</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge">Rising Athlete & Young Leader</div>
+            <h1>Hello, I'm <span>Mourad.</span></h1>
+            <p>A driven 13-year-old dedicated to continuous growth, strategic excellence on the football pitch, and the core values of brotherhood and teamwork.</p>
+            <div class="btn-group">
+                <a href="#speech" class="btn btn-primary">Read My Speech</a>
+                <a href="#football" class="btn btn-outline">Explore My Profile</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Highlights -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">13</div>
+            <div class="stat-label">Years of Age</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Passion for Football</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Brothers Strong (Me + 2)</div>
+        </div>
+    </div>
+
+    <!-- Professional Speech Section -->
+    <section id="speech">
+        <h2 class="section-title">Executive Personal Statement</h2>
+        <p class="section-subtitle">A professional speech introducing who I am, what drives me, and the values I stand for.</p>
+
+        <div class="speech-box">
+            <div class="speech-text" id="speechContent">
+                <p>"Good day, everyone. My name is Mourad. At thirteen years old, I stand at an exciting starting line in my life—driven by ambition, discipline, and a relentless commitment to improve every single day.</p>
+                <p>If you want to truly understand my character, you only need to look at two areas of my life: the football pitch and my family. To me, football is far more than just a sport; it is a training ground for life. Every match and every practice session teaches me the value of strategic vision, composure under pressure, and the fundamental truth that individual talent means nothing without unified teamwork.</p>
+                <p>That commitment to teamwork begins at home. Growing up alongside my two brothers has been one of my greatest strengths. Through shared challenges, healthy competition, and unwavering support, brotherhood has shaped my sense of loyalty, communication, and leadership.</p>
+                <p>As I look toward the future, my objective is clear: to bring the focus of a dedicated athlete and the integrity of a devoted brother into every academic, athletic, and personal goal I pursue. Thank you."</p>
+            </div>
+            <div class="speech-actions">
+                <button class="btn btn-primary" onclick="copySpeech()" id="copyBtn">Copy Speech Text</button>
+                <button class="btn btn-outline" onclick="speakSpeech()" id="speakBtn">Listen to Speech</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Football & Core Pillars Section -->
+    <section id="football">
+        <h2 class="section-title">The Football Mindset</h2>
+        <p class="section-subtitle">How my passion for the game builds discipline on and off the field.</p>
+
+        <div class="cards-grid">
+            <div class="info-card">
+                <h3>Athletic Philosophy</h3>
+                <p>Football requires instant decision-making, spatial awareness, and resilience. Whether training or competing, I treat every session as an opportunity to sharpen my mentality and elevate the players around me.</p>
+            </div>
+
+            <div class="info-card">
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>Teamwork & Vision</span>
+                        <span>95%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 95%;"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>Work Ethic & Discipline</span>
+                        <span>92%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 92%;"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>Competitive Drive</span>
+                        <span>98%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 98%;"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brotherhood Section -->
+    <section id="brotherhood">
+        <h2 class="section-title">The Foundation: My Two Brothers</h2>
+        <p class="section-subtitle">Stronger together through family, respect, and shared ambition.</p>
+
+        <div class="cards-grid">
+            <div class="info-card">
+                <h3>Built-In Teamwork</h3>
+                <p>Having two brothers means I have never walked alone. From everyday moments to pushing each other to be better, our bond is the foundation of my confidence.</p>
+            </div>
+            <div class="info-card">
+                <h3>Healthy Competition</h3>
+                <p>Growing up with two brothers naturally creates an environment where you learn to adapt, stand your ground, and celebrate each other's victories with genuine pride.</p>
+            </div>
+            <div class="info-card">
+                <h3>Unbreakable Loyalty</h3>
+                <p>No matter where life takes us, the lessons of respect, responsibility, and unity I share with my brothers define how I treat teammates and peers every day.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Mourad. Designed with precision, passion, and purpose.</p>
+    </footer>
+
+    <script>
+        function copySpeech() {
+            const text = document.getElementById('speechContent').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.innerText = 'Copied!';
+                setTimeout(() => {
+                    btn.innerText = 'Copy Speech Text';
+                }, 2000);
+            });
+        }
+
+        function speakSpeech() {
+            const synth = window.speechSynthesis;
+            const btn = document.getElementById('speakBtn');
+
+            if (synth.speaking) {
+                synth.cancel();
+                btn.innerText = 'Listen to Speech';
+                return;
+            }
+
+            const text = document.getElementById('speechContent').innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.95;
+            utterance.onend = () => {
+                btn.innerText = 'Listen to Speech';
+            };
+
+            btn.innerText = 'Stop Audio';
+            synth.speak(utterance);
+        }
+    </script>
 </body>
 </html>
