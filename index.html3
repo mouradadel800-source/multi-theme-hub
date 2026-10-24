@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mourad | Official Personal Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0f1d;
+            --bg-card: #131c31;
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.25);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 8%;
+            background: rgba(10, 15, 29, 0.85);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8rem 8% 4rem;
+            background: radial-gradient(circle at 80% 20%, var(--accent-glow), transparent 40%);
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--accent);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #052e16;
+            box-shadow: 0 8px 20px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Quick Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem 8%;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 5rem 8%;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        /* Professional Speech Box */
+        .speech-box {
+            background: linear-gradient(145deg, #131c31, #0f172a);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 3rem;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .speech-text {
+            font-size: 1.2rem;
+            color: #e2e8f0;
+            line-height: 1.9;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .speech-text p {
+            margin-bottom: 1.2rem;
+        }
+
+        .speech-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Pillars / Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .info-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .info-card p {
+            color: var(--text-muted);
+        }
+
+        /* Skill Bars */
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .skill-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 50px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 8%;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            .nav-links {
+                display: none;
+            }
+            .speech-box {
+                padding: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">MOURAD<span>.</span></a>
+        <ul class="nav-links">
+            <li><a href="#speech">Executive Speech</a></li>
+            <li><a href="#football">Football</a></li>
+            <li><a href="#brotherhood">Brotherhood</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="badge">Rising Athlete & Young Leader</div>
+            <h1>Hello, I'm <span>Mourad.</span></h1>
+            <p>A driven 13-year-old dedicated to continuous growth, strategic excellence on the football pitch, and the core values of brotherhood and teamwork.</p>
+            <div class="btn-group">
+                <a href="#speech" class="btn btn-primary">Read My Speech</a>
+                <a href="#football" class="btn btn-outline">Explore My Profile</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Highlights -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">13</div>
+            <div class="stat-label">Years of Age</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Passion for Football</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Brothers Strong (Me + 2)</div>
+        </div>
+    </div>
+
+    <!-- Professional Speech Section -->
+    <section id="speech">
+        <h2 class="section-title">Executive Personal Statement</h2>
+        <p class="section-subtitle">A professional speech introducing who I am, what drives me, and the values I stand for.</p>
+
+        <div class="speech-box">
+            <div class="speech-text" id="speechContent">
+                <p>"Good day, everyone. My name is Mourad. At thirteen years old, I stand at an exciting starting line in my life—driven by ambition, discipline, and a relentless commitment to improve every single day.</p>
+                <p>If you want to truly understand my character, you only need to look at two areas of my life: the football pitch and my family. To me, football is far more than just a sport; it is a training ground for life. Every match and every practice session teaches me the value of strategic vision, composure under pressure, and the fundamental truth that individual talent means nothing without unified teamwork.</p>
+                <p>That commitment to teamwork begins at home. Growing up alongside my two brothers has been one of my greatest strengths. Through shared challenges, healthy competition, and unwavering support, brotherhood has shaped my sense of loyalty, communication, and leadership.</p>
+                <p>As I look toward the future, my objective is clear: to bring the focus of a dedicated athlete and the integrity of a devoted brother into every academic, athletic, and personal goal I pursue. Thank you."</p>
+            </div>
+            <div class="speech-actions">
+                <button class="btn btn-primary" onclick="copySpeech()" id="copyBtn">Copy Speech Text</button>
+                <button class="btn btn-outline" onclick="speakSpeech()" id="speakBtn">Listen to Speech</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Football & Core Pillars Section -->
+    <section id="football">
+        <h2 class="section-title">The Football Mindset</h2>
+        <p class="section-subtitle">How my passion for the game builds discipline on and off the field.</p>
+
+        <div class="cards-grid">
+            <div class="info-card">
+                <h3>Athletic Philosophy</h3>
+                <p>Football requires instant decision-making, spatial awareness, and resilience. Whether training or competing, I treat every session as an opportunity to sharpen my mentality and elevate the players around me.</p>
+            </div>
+
+            <div class="info-card">
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>Teamwork & Vision</span>
+                        <span>95%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 95%;"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>Work Ethic & Discipline</span>
+                        <span>92%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 92%;"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span>Competitive Drive</span>
+                        <span>98%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-fill" style="width: 98%;"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brotherhood Section -->
+    <section id="brotherhood">
+        <h2 class="section-title">The Foundation: My Two Brothers</h2>
+        <p class="section-subtitle">Stronger together through family, respect, and shared ambition.</p>
+
+        <div class="cards-grid">
+            <div class="info-card">
+                <h3>Built-In Teamwork</h3>
+                <p>Having two brothers means I have never walked alone. From everyday moments to pushing each other to be better, our bond is the foundation of my confidence.</p>
+            </div>
+            <div class="info-card">
+                <h3>Healthy Competition</h3>
+                <p>Growing up with two brothers naturally creates an environment where you learn to adapt, stand your ground, and celebrate each other's victories with genuine pride.</p>
+            </div>
+            <div class="info-card">
+                <h3>Unbreakable Loyalty</h3>
+                <p>No matter where life takes us, the lessons of respect, responsibility, and unity I share with my brothers define how I treat teammates and peers every day.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Mourad. Designed with precision, passion, and purpose.</p>
+    </footer>
+
+    <script>
+        function copySpeech() {
+            const text = document.getElementById('speechContent').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.innerText = 'Copied!';
+                setTimeout(() => {
+                    btn.innerText = 'Copy Speech Text';
+                }, 2000);
+            });
+        }
+
+        function speakSpeech() {
+            const synth = window.speechSynthesis;
+            const btn = document.getElementById('speakBtn');
+
+            if (synth.speaking) {
+                synth.cancel();
+                btn.innerText = 'Listen to Speech';
+                return;
+            }
+
+            const text = document.getElementById('speechContent').innerText;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.95;
+            utterance.onend = () => {
+                btn.innerText = 'Listen to Speech';
+            };
+
+            btn.innerText = 'Stop Audio';
+            synth.speak(utterance);
+        }
+    </script>
+</body>
+</html>
